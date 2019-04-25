@@ -51,7 +51,7 @@ mv "/home/${default_user}/.profile" "${home}"
 mv "/home/${default_user}/.bash*" "${home}"
 
 echo "Setting up oh-my-zsh..."
-NO_INTERACTIVE=true su "${user}" -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+NO_INTERACTIVE=true sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
 mv `find "${workspace}/git/loki-theme" -name "*\.zsh*"` "${home}/.oh-my-zsh/custom/"
 git clone "https://github.com/subtlepseudonym/dotfiles.git" "${workspace}/git/dotfiles"
