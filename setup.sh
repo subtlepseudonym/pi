@@ -60,11 +60,11 @@ mv "${workspace}/git/dotfiles/zsh/zprofile" "${home}/.zprofile"
 mv "${workspace}/git/dotfiles/zsh/zshrc" "${home}/.zshrc"
 chown -R "${user}:${user}" "${home}"
 
-echo "Cleaning up..."
-userdel "${default_user}"
-rm -rf "/home/${default_user}"
-rm -rf "${workspace}/git/loki-theme" "${workspace}/git/dotfiles"
-apt-get autoremove
+echo "Creating cleanup script..."
+echo "userdel ${default_user} && \
+rm -rf /home/${default_user} && \
+rm -rf ${workspace}/git/loki-theme ${workspace}/git/dotfiles && \
+apt-get autoremove" >> "${home}/cleanup.sh"
 
 echo "Rebooting in 10 seconds..."
 sleep "10s"
