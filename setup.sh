@@ -34,9 +34,9 @@ echo "Updating and installing packages..."
 apt-get -y update
 apt-get -y install \
 	git \
-	docker \
 	zsh \
 	vim
+curl -sSL https://get.docker.com | sh
 
 echo "Configuring raspberry pi..."
 raspi-config nonint do_hostname "${hostname}"
@@ -48,7 +48,7 @@ mv "/home/${default_user}/.profile" "${home}"
 mv "/home/${default_user}/.bash*" "${home}"
 
 echo "Setting up oh-my-zsh..."
-su "${user}" -c "NO_INTERACTIVE=true $(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+NO_INTERACTIVE=true su "${user}" -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
 mv `find "${workspace}/git/loki-theme" -name "*\.zsh*"` "${home}/.oh-my-zsh/custom/"
 git clone "https://github.com/subtlepseudonym/dotfiles.git" "${workspace}/git/dotfiles"
