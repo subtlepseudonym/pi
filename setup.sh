@@ -32,10 +32,13 @@ passwd "${user}"
 
 echo "Updating and installing packages..."
 apt-get -y update
+apt-get -y upgrade
 apt-get -y install \
 	git \
 	zsh \
-	vim
+	vim \
+	apt-transport-https \
+	ca-certificates
 curl -sSL https://get.docker.com | sh
 
 echo "Configuring raspberry pi..."
