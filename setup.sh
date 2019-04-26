@@ -50,6 +50,7 @@ chown -R "${user}:${user}" "${home}"
 
 echo "Setting up oh-my-zsh..."
 NO_INTERACTIVE=true su -l "${user}" -c "$(curl -fsSL https://raw.githubusercontent.com/subtlepseudonym/oh-my-zsh/feature/install-noninteractive/tools/install.sh)"
+chsh -s /usr/bin/zsh "${user}"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
 mv `find "${workspace}/git/loki-theme" -name "*\.zsh*"` "${home}/.oh-my-zsh/custom/"
 git clone "https://github.com/subtlepseudonym/dotfiles.git" "${workspace}/git/dotfiles"
