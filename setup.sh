@@ -65,6 +65,7 @@ echo "userdel ${default_user} && \
 rm -rf /home/${default_user} && \
 rm -rf ${workspace}/git/loki-theme ${workspace}/git/dotfiles && \
 apt-get autoremove" >> "${home}/cleanup.sh"
+chmod u+x "${home}/cleanup.sh"
 
 echo "Rebooting in 10 seconds..."
 sleep "10s"
