@@ -57,6 +57,7 @@ git clone "https://github.com/subtlepseudonym/dotfiles.git" "${workspace}/git/do
 mv "${workspace}/git/dotfiles/vimrc" "${home}/.vimrc"
 mv "${workspace}/git/dotfiles/zsh/zprofile" "${home}/.zprofile"
 mv "${workspace}/git/dotfiles/zsh/zshrc" "${home}/.zshrc"
+sed -i "s/home\/loki/home\/${user}/g" "${home}/.zshrc"
 chown -R "${user}:${user}" "${home}"
 
 echo "Creating cleanup script..."
