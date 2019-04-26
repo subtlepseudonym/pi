@@ -45,7 +45,8 @@ raspi-config nonint do_ssh 0
 echo "Creating workspace..."
 mkdir -p "${workspace}/git" "${workspace}/volumes" "${workspace}/scripts"
 mv "/home/${default_user}/.profile" "${home}"
-mv "/home/${default_user}/.bash*" "${home}"
+mv "/home/${default_user}/.bashrc" "${home}"
+chown -R "${user}:${user}" "${home}"
 
 echo "Setting up oh-my-zsh..."
 NO_INTERACTIVE=true su -l "${user}" -c "$(curl -fsSL https://raw.githubusercontent.com/subtlepseudonym/oh-my-zsh/feature/install-noninteractive/tools/install.sh)"
