@@ -35,7 +35,8 @@ apt-get -y update
 apt-get -y install \
 	git \
 	zsh \
-	vim
+	vim \
+	screen
 curl -sSL https://get.docker.com | sh
 
 echo "Configuring raspberry pi..."
