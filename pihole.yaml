@@ -94,8 +94,14 @@ spec:
       - name: pihole
         image: pihole/pihole:latest
         imagePullPolicy: Always
+        env:
+        - name: TZ
+          value: "America/New_York"
+        - name: DNS1
+          value: 1.1.1.1
+        - name: DNS2
+          value: 208.67.222.222
         volumeMounts:
-  # name must match the volume name below
         - name: pihole-local-etc-volume
           mountPath: "/etc/pihole"
         - name: pihole-local-dnsmasq-volume
