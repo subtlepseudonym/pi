@@ -13,7 +13,7 @@ fi
 hostname="$1"
 user="$2"
 
-default_user="pi"
+default_user="ubuntu"
 home="/home/${user}"
 workspace="${home}/workspace"
 
@@ -30,18 +30,18 @@ groupadd "docker"
 useradd -G `echo "${user_groups[@]} docker" | tr -s " " ","` "${user}"
 passwd "${user}"
 
+echo "Removing broken apt lists..."
+rm /var/lib/apt/lists/* -vf
+
 echo "Updating and installing packages..."
 apt-get -y update
 apt-get -y install \
-	git \
-	zsh \
-	vim \
-	screen
+	ntp \
+	zsh
 curl -sSL https://get.docker.com | sh
 
-echo "Configuring raspberry pi..."
-raspi-config nonint do_hostname "${hostname}"
-raspi-config nonint do_ssh 0
+echo "Setting up hostname..."
+hostnamectl set-hostname "${hostname}"
 
 echo "Creating workspace..."
 mkdir -p "${workspace}/git" "${workspace}/volumes" "${workspace}/scripts"
@@ -50,7 +50,8 @@ mv "/home/${default_user}/.bashrc" "${home}"
 chown -R "${user}:${user}" "${home}"
 
 echo "Setting up oh-my-zsh..."
-NO_INTERACTIVE=true su -l "${user}" -c "$(curl -fsSL https://raw.githubusercontent.com/subtlepseudonym/oh-my-zsh/feature/install-noninteractive/tools/install.sh)"
+mkdir "${home}/.oh-my-zsh"
+CHSH=no RUNZSH=no ZSH="${home}/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 chsh -s /usr/bin/zsh "${user}"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
 mv `find "${workspace}/git/loki-theme" -name "*\.zsh*"` "${home}/.oh-my-zsh/custom/"
@@ -62,11 +63,13 @@ sed -i "s/home\/loki/home\/${user}/g" "${home}/.zshrc"
 chown -R "${user}:${user}" "${home}"
 
 echo "Creating cleanup script..."
-echo "userdel ${default_user} && \
-rm -rf /home/${default_user} && \
-rm -rf ${workspace}/git/loki-theme ${workspace}/git/dotfiles && \
-apt-get autoremove" >> "${home}/cleanup.sh"
-chmod u+x "${home}/cleanup.sh"
+cleanup="${home}/cleanup.sh"
+echo "#!/bin/bash -x" >> "${cleanup}"
+echo "userdel ${default_user}" >> "${cleanup}"
+echo "rm -rf /home/${default_user}" >> "${cleanup}"
+echo "rm -rf ${workspace}/git/loki-theme ${workspace}/git/dotfiles" >> "${cleanup}"
+echo "apt-get autoremove" >> "${cleanup}"
+chmod u+x "${cleanup}"
 
 echo "Rebooting in 10 seconds..."
 sleep "10s"
