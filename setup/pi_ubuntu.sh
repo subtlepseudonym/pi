@@ -17,7 +17,7 @@ default_user="ubuntu"
 home="/home/${user}"
 workspace="${home}/workspace"
 
-user_groups=()
+user_groups=("docker")
 default_groups=($(groups "${default_user}" | tr -d ":"))
 for i in "${default_groups[@]}"; do
 	if [[ "${i}" != "${default_user}" ]]; then
@@ -27,7 +27,7 @@ done
 
 echo "Creating user..." # Done first because it's interactive
 groupadd "docker"
-useradd -G `echo "${user_groups[@]} docker" | tr -s " " ","` "${user}"
+useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
 passwd "${user}"
 
 echo "Removing broken apt lists..."
@@ -62,7 +62,6 @@ chown -R "${user}:${user}" "${home}"
 
 echo "Setting up oh-my-zsh..."
 CHSH=no RUNZSH=no ZSH="${home}/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-chown -R "${user}:${user}" "${home}/.oh-my-zsh"
 chsh -s /usr/bin/zsh "${user}"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
 mv `find "${workspace}/git/loki-theme" -name "*\.zsh*"` "${home}/.oh-my-zsh/custom/"

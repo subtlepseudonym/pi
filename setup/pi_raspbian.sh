@@ -17,7 +17,7 @@ default_user="pi"
 home="/home/${user}"
 workspace="${home}/workspace"
 
-user_groups=()
+user_groups=("docker")
 default_groups=($(groups "${default_user}" | tr -d ":"))
 for i in "${default_groups[@]}"; do
 	if [[ "${i}" != "${default_user}" ]]; then
@@ -27,7 +27,7 @@ done
 
 echo "Creating user..." # Done first because it's interactive
 groupadd "docker"
-useradd -G `echo "${user_groups[@]} docker" | tr -s " " ","` "${user}"
+useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
 passwd "${user}"
 
 echo "Updating and installing packages..."
