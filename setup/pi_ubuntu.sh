@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 if [ "$EUID" -ne 0 ]; then
 	echo "This script must be run as root"
@@ -42,6 +42,12 @@ curl -sSL https://get.docker.com | sh
 
 echo "Setting up hostname..."
 hostnamectl set-hostname "${hostname}"
+cat /etc/hosts | awk -v hostname=${hostname} '/.*/ { if ($0 !~ /127.0.1.1/) { print $0 }} /127.0.0.1/ { print "127.0.1.1 hostname" }' >> /etc/hosts
+
+echo "Adding cgroup memory kernel parameters..."
+chmod u+w /boot/firmware/cmdline.txt
+sed -i -e "s/rootwait/cgroup_memory=1 cgroup_enable=memory rootwait/" /boot/firmware/cmdline.txt
+chmod u-w /boot/firmware/cmdline.txt
 
 echo "Creating workspace..."
 mkdir -p "${workspace}/git" "${workspace}/volumes" "${workspace}/scripts"
@@ -50,7 +56,6 @@ mv "/home/${default_user}/.bashrc" "${home}"
 chown -R "${user}:${user}" "${home}"
 
 echo "Setting up oh-my-zsh..."
-mkdir "${home}/.oh-my-zsh"
 CHSH=no RUNZSH=no ZSH="${home}/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 chsh -s /usr/bin/zsh "${user}"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
