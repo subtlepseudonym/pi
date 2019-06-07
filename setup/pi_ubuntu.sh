@@ -33,6 +33,10 @@ passwd "${user}"
 echo "Removing broken apt lists..."
 rm /var/lib/apt/lists/* -vf
 
+echo "Stopping automatic updates..."
+systemctl disable apt-daily.timer
+systemctl disable apt-daily-upgrade.timer
+
 echo "Updating and installing packages..."
 apt-get -y update
 apt-get -y install \
@@ -57,6 +61,7 @@ chown -R "${user}:${user}" "${home}"
 
 echo "Setting up oh-my-zsh..."
 CHSH=no RUNZSH=no ZSH="${home}/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+chown -R "${user}:${user}" "${home}/.oh-my-zsh"
 chsh -s /usr/bin/zsh "${user}"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
 mv `find "${workspace}/git/loki-theme" -name "*\.zsh*"` "${home}/.oh-my-zsh/custom/"
