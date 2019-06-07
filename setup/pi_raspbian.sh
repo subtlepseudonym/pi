@@ -50,7 +50,6 @@ mv "/home/${default_user}/.bashrc" "${home}"
 chown -R "${user}:${user}" "${home}"
 
 echo "Setting up oh-my-zsh..."
-mkdir "${home}/.oh-my-zsh"
 CHSH=no RUNZSH=no ZSH="${home}/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 chsh -s /usr/bin/zsh "${user}"
 git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
