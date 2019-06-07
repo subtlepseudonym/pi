@@ -38,6 +38,7 @@ systemctl disable apt-daily.timer
 systemctl disable apt-daily-upgrade.timer
 
 echo "Updating and installing packages..."
+apt-mark hold linux-firmware
 apt-get -y update
 apt-get -y install \
 	ntp \
@@ -46,7 +47,7 @@ curl -sSL https://get.docker.com | sh
 
 echo "Setting up hostname..."
 hostnamectl set-hostname "${hostname}"
-cat /etc/hosts | awk -v hostname=${hostname} '/.*/ { if ($0 !~ /127.0.1.1/) { print $0 }} /127.0.0.1/ { print "127.0.1.1 hostname" }' >> /etc/hosts
+cat /etc/hosts | awk -v hostname=${hostname} '/.*/ { if ($0 !~ /127.0.1.1/) { print $0 }} /127.0.0.1/ { print "127.0.1.1 hostname" }' > /etc/hosts
 
 echo "Adding cgroup memory kernel parameters..."
 chmod u+w /boot/firmware/cmdline.txt
@@ -78,7 +79,6 @@ echo "#!/bin/bash -x" >> "${cleanup}"
 echo "userdel ${default_user}" >> "${cleanup}"
 echo "rm -rf /home/${default_user}" >> "${cleanup}"
 echo "rm -rf ${workspace}/git/loki-theme ${workspace}/git/dotfiles" >> "${cleanup}"
-echo "apt-get autoremove" >> "${cleanup}"
 chmod u+x "${cleanup}"
 
 echo "Rebooting in 10 seconds..."
