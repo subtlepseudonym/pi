@@ -43,6 +43,11 @@ echo "Configuring raspberry pi..."
 raspi-config nonint do_hostname "${hostname}"
 raspi-config nonint do_ssh 0
 
+echo "Setting kernel cmdline parameters..."
+cmdline="/boot/cmdline.txt"
+chmod u+w "${cmdline}"
+sed -i -e "s/rootwait/cgroup_memory=1 cgroup_enable=memory rootwait/" "${cmdline}"
+
 echo "Creating workspace..."
 mkdir -p "${workspace}/git" "${workspace}/volumes" "${workspace}/scripts"
 mv "/home/${default_user}/.profile" "${home}"
