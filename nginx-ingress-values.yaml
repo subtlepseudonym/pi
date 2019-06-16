@@ -2,6 +2,8 @@ controller:
   image:
     repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-arm64
     tag: 0.24.1
+  service:
+    externalTrafficPolicy: "Local"
   extraArgs:
     tcp-services-configmap: default/nginx-tcp-configmap
     udp-services-configmap: default/nginx-udp-configmap
