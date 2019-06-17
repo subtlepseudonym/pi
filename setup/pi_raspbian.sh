@@ -33,6 +33,7 @@ passwd "${user}"
 echo "Updating and installing packages..."
 apt-get -y update
 apt-get -y install \
+	dnsutils \
 	git \
 	zsh \
 	vim \
@@ -64,6 +65,7 @@ mv "${workspace}/git/dotfiles/vimrc" "${home}/.vimrc"
 mv "${workspace}/git/dotfiles/zsh/zprofile" "${home}/.zprofile"
 mv "${workspace}/git/dotfiles/zsh/zshrc" "${home}/.zshrc"
 sed -i "s/home\/loki/home\/${user}/g" "${home}/.zshrc"
+sed -i "s#PATH=\$PATH#PATH=/usr/local/sbin:/usr/sbin:\$PATH#g" "${home}/.zprofile"
 chown -R "${user}:${user}" "${home}"
 
 echo "Creating cleanup script..."

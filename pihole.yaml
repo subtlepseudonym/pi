@@ -150,4 +150,3 @@ metadata:
   name: nginx-udp
 data:
   53: "default/pihole:53"
-:set nonumber
