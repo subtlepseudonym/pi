@@ -11,7 +11,7 @@ metadata:
   name: pihole-local-etc-volume
 spec:
   capacity:
-    storage: 500Mi
+    storage: 1Gi
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
@@ -37,7 +37,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -45,7 +45,7 @@ metadata:
   name: pihole-local-dnsmasq-volume
 spec:
   capacity:
-    storage: 500Mi
+    storage: 1Gi
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
@@ -71,7 +71,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 250Mi
+      storage: 1Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
