@@ -50,8 +50,8 @@ chmod u+w "${cmdline}"
 sed -i -e "s/rootwait/cgroup_memory=1 cgroup_enable=memory rootwait/" "${cmdline}"
 
 echo "Setting up workspace..."
-mv "/home/${default_user}/.profile" "${home}"
-mv "/home/${default_user}/.bashrc" "${home}"
+mv "/home/${default_user}/.profile" "${home}/"
+mv "/home/${default_user}/.bashrc" "${home}/"
 git clone "https://github.com/subtlepseudonym/dotfiles" "${home}/dotfiles"
 /usr/bin/sudo -H -u ${user} ${home}/dotfiles/setup/install
 chsh -s /usr/bin/zsh "${user}"
