@@ -53,9 +53,9 @@ echo "Setting up workspace..."
 mv "/home/${default_user}/.profile" "${home}/"
 mv "/home/${default_user}/.bashrc" "${home}/"
 git clone "https://github.com/subtlepseudonym/dotfiles" "${home}/dotfiles"
+chown -R "${user}:${user}" "${home}"
 /usr/bin/sudo -H -u ${user} ${home}/dotfiles/setup/install
 chsh -s /usr/bin/zsh "${user}"
-chown -R "${user}:${user}" "${home}"
 
 echo "Creating cleanup script..."
 cleanup="${home}/cleanup.sh"
