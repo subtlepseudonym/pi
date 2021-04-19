@@ -54,7 +54,7 @@ mv "/home/${default_user}/.profile" "${home}/"
 mv "/home/${default_user}/.bashrc" "${home}/"
 git clone "https://github.com/subtlepseudonym/dotfiles" "${home}/dotfiles"
 chown -R "${user}:${user}" "${home}"
-/usr/bin/sudo -H -u ${user} ${home}/dotfiles/setup/install
+/usr/bin/sudo -H -u ${user} ${home}/dotfiles/setup/install --exclude go --exclude macos --exclude nvm
 chsh -s /usr/bin/zsh "${user}"
 
 echo "Creating cleanup script..."
