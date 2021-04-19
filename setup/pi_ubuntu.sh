@@ -54,23 +54,13 @@ chmod u+w /boot/firmware/cmdline.txt
 sed -i -e "s/rootwait/cgroup_memory=1 cgroup_enable=memory rootwait/" /boot/firmware/cmdline.txt
 chmod u-w /boot/firmware/cmdline.txt
 
-echo "Creating workspace..."
-mkdir -p "${workspace}/git" "${workspace}/volumes" "${workspace}/scripts"
-mv "/home/${default_user}/.profile" "${home}"
-mv "/home/${default_user}/.bashrc" "${home}"
+echo "Setting up workspace..."
+mv "/home/${default_user}/.profile" "${home}/"
+mv "/home/${default_user}/.bashrc" "${home}/"
+git clone "https://github.com/subtlepseudonym/dotfiles" "${home}/dotfiles"
 chown -R "${user}:${user}" "${home}"
-
-echo "Setting up oh-my-zsh..."
-CHSH=no RUNZSH=no ZSH="${home}/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+/usr/bin/sudo -H -u ${user} ${home}/dotfiles/setup/install --exclude go --exclude macos --exclude nvm
 chsh -s /usr/bin/zsh "${user}"
-git clone "https://github.com/subtlepseudonym/loki-theme.git" "${workspace}/git/loki-theme"
-mv `find "${workspace}/git/loki-theme" -name "*\.zsh*"` "${home}/.oh-my-zsh/custom/"
-git clone "https://github.com/subtlepseudonym/dotfiles.git" "${workspace}/git/dotfiles"
-mv "${workspace}/git/dotfiles/vimrc" "${home}/.vimrc"
-mv "${workspace}/git/dotfiles/zsh/zprofile" "${home}/.zprofile"
-mv "${workspace}/git/dotfiles/zsh/zshrc" "${home}/.zshrc"
-sed -i "s/home\/loki/home\/${user}/g" "${home}/.zshrc"
-chown -R "${user}:${user}" "${home}"
 
 echo "Creating cleanup script..."
 cleanup="${home}/cleanup.sh"
