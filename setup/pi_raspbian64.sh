@@ -30,6 +30,27 @@ groupadd "docker"
 useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
 passwd "${user}"
 
+if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
+	echo "SSID: "
+	read -e ssid
+
+	echo "Password: "
+	read -e psk
+
+	echo "Two character country code (default US): "
+	read -e country
+	if [[ -z "${country}" ]]; then
+		country="US"
+	fi
+
+	echo "Adding network information..."
+	raspi-config nonint do_wifi_country "${country}"
+	echo "\nnetwork={\n\tssid=\"${ssid}\"\n\tpsk=\"${psk}\"\n\tscan_ssid=1\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
+
+	echo "Reconfiguring network device..."
+	wpa_cli -i wlan0 reconfigure
+fi
+
 echo "Updating and installing packages..."
 apt-get -y update
 apt-get -y install \
