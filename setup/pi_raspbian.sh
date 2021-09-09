@@ -34,13 +34,13 @@ echo "Connect to wifi? (Y/n)"
 read -e connect_wifi
 
 if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
-	echo "SSID: "
+	echo -n "SSID: "
 	read -e ssid
 
-	echo "Password: "
+	echo -n "Password: "
 	read -e psk
 
-	echo "Two character country code (default US): "
+	echo -n "Two character country code (default US): "
 	read -e country
 	if [[ -z "${country}" ]]; then
 		country="US"
@@ -48,7 +48,7 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 
 	echo "Adding network information..."
 	raspi-config nonint do_wifi_country "${country}"
-	echo "\nnetwork={\n\tssid=\"${ssid}\"\n\tpsk=\"${psk}\"\n\tscan_ssid=1\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
+	echo -e "\nnetwork={\n\tssid=\"${ssid}\"\n\tpsk=\"${psk}\"\n\tscan_ssid=1\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
 
 	echo "Reconfiguring network device..."
 	wpa_cli -i wlan0 reconfigure
