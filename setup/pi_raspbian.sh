@@ -53,8 +53,8 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 	read -e interface
 	if [[ -z "${interface}" ]]; then
 		default_exists="false"
-		wifi_interfaces=($(raspi-config nonint list_wifi_interfaces))
-		for i in "${wifi_interfaces[@]}"; do
+		wlan_interfaces=($(raspi-config nonint list_wlan_interfaces))
+		for i in "${wlan_interfaces[@]}"; do
 			# If you have so many network interfaces that not short-circuiting scales badly, I'll eat my shoes
 			[[ "${i}" == "${default_interface}" ]] && default_exists="true"
 		done
