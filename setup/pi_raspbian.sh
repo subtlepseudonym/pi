@@ -27,8 +27,11 @@ done
 
 echo "Creating user..." # Done first because it's interactive
 groupadd "docker"
-useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
-passwd "${user}"
+# Only create user if it doesn't exist
+if ! id --user "${user}"; then
+	useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
+	passwd "${user}"
+fi
 
 echo "Configuring raspberry pi..."
 raspi-config nonint do_hostname "${hostname}"
