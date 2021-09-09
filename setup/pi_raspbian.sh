@@ -14,6 +14,8 @@ hostname="$1"
 user="$2"
 
 default_user="pi"
+default_country="US"
+
 home="/home/${user}"
 workspace="${home}/workspace"
 
@@ -47,10 +49,10 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 	echo -n "Password: "
 	read -e psk
 
-	echo -n "Two character country code (default US): "
+	echo -n "Two character country code (default \"${default_country}\"): "
 	read -e country
 	if [[ -z "${country}" ]]; then
-		country="US"
+		country="${default_country}"
 	fi
 
 	echo "Adding network information..."
