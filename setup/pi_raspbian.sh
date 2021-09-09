@@ -30,6 +30,10 @@ groupadd "docker"
 useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
 passwd "${user}"
 
+echo "Configuring raspberry pi..."
+raspi-config nonint do_hostname "${hostname}"
+raspi-config nonint do_ssh 0
+
 echo "Connect to wifi? (Y/n)"
 read -e connect_wifi
 
@@ -69,10 +73,6 @@ apt-get -y install \
 	vim \
 	screen
 curl -sSL https://get.docker.com | sh
-
-echo "Configuring raspberry pi..."
-raspi-config nonint do_hostname "${hostname}"
-raspi-config nonint do_ssh 0
 
 echo "Setting kernel cmdline parameters..."
 cmdline="/boot/cmdline.txt"
