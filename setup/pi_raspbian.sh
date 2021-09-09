@@ -65,6 +65,7 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 		fi
 
 		interface="${default_interface}"
+		echo # Fixes spacing issue when no user input is provided
 	fi
 
 	echo -n "SSID: "
@@ -77,6 +78,7 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 	read -e country
 	if [[ -z "${country}" ]]; then
 		country="${default_country}"
+		echo # Fixes same spacing issue as above
 	fi
 
 	echo "Adding network information..."
@@ -85,6 +87,7 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 
 	echo "Reconfiguring network device..."
 	wpa_cli -i "${interface}" reconfigure
+	sleep 5 # Wait for supplicant to scan for new SSID
 
 	status=$(wpa_cli -i "${interface}" status | grep "wpa_state=" | cut -d= -f2)
 	if [[ "${status}" != "COMPLETED" ]]; then
