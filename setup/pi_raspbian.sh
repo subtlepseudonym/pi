@@ -52,6 +52,12 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 
 	echo "Reconfiguring network device..."
 	wpa_cli -i wlan0 reconfigure
+
+	status=$(wpa_cli -i wlan0 status | grep "wpa_state=" | cut -d= -f2)
+	if [[ "${status}" != "COMPLETED" ]]; then
+		echo "Unable to connect to wifi. Exiting"
+		exit 1
+	fi
 fi
 
 echo "Updating and installing packages..."
