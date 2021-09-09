@@ -28,11 +28,8 @@ for i in "${default_groups[@]}"; do
 	fi
 done
 
-# Do interactive actions first
-
-# Only create groups and user if they don't exist
 echo "Creating groups..."
-if [[ $(getent group "docker") ]]; then
+if [[ ! "$(getent group "docker")" ]]; then
 	groupadd "docker"
 fi
 
