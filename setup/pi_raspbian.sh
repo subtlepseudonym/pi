@@ -28,16 +28,24 @@ for i in "${default_groups[@]}"; do
 	fi
 done
 
-echo "Creating user..." # Done first because it's interactive
-groupadd "docker"
-# Only create user if it doesn't exist
-if ! id --user "${user}"; then
+# Do interactive actions first
+
+# Only create groups and user if they don't exist
+echo "Creating groups..."
+if [[ $(getent group "docker") ]]; then
+	groupadd "docker"
+fi
+
+echo "Creating user..."
+if ! id --user "${user}" &>/dev/null; then
 	useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
 	passwd "${user}"
 fi
 
 echo "Configuring raspberry pi..."
-raspi-config nonint do_hostname "${hostname}"
+if [[ "$(hostname)" != "${hostname}" ]]; then
+	raspi-config nonint do_hostname "${hostname}"
+fi
 raspi-config nonint do_ssh 0
 
 echo "Connect to wifi? (Y/n)"
