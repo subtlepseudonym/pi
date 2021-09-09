@@ -35,7 +35,7 @@ fi
 
 echo "Creating user..."
 if ! id --user "${user}" &>/dev/null; then
-	useradd -G `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
+	useradd --create-home --groups `echo "${user_groups[@]}" | tr -s " " ","` "${user}"
 	passwd "${user}"
 fi
 
