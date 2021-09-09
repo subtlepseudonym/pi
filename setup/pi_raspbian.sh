@@ -15,6 +15,7 @@ user="$2"
 
 default_user="pi"
 default_country="US"
+default_interface="wlan0"
 
 home="/home/${user}"
 workspace="${home}/workspace"
@@ -43,6 +44,24 @@ echo "Connect to wifi? (Y/n)"
 read -e connect_wifi
 
 if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
+	echo -n "Wireless interface (default \"${default_interface}\"): "
+	read -e interface
+	if [[ -z "${interface}" ]]; then
+		default_exists="false"
+		wifi_interfaces=($(raspi-config nonint list_wifi_interfaces))
+		for i in "${wifi_interfaces[@]}"; do
+			# If you have so many network interfaces that not short-circuiting scales badly, I'll eat my shoes
+			[[ "${i}" == "${default_interface}" ]] && default_exists="true"
+		done
+
+		if [[ "${default_exists}" != "true" ]]; then
+			echo "Default interface \"${default_interface}\" not found. Please provide a network interface"
+			exit 1
+		fi
+
+		interface="${default_interface}"
+	fi
+
 	echo -n "SSID: "
 	read -e ssid
 
@@ -60,11 +79,11 @@ if [[ -z "${connect_wifi}" || "${connect_wifi}" == [yY]* ]]; then
 	echo -e "\nnetwork={\n\tssid=\"${ssid}\"\n\tpsk=\"${psk}\"\n\tscan_ssid=1\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
 
 	echo "Reconfiguring network device..."
-	wpa_cli -i wlan0 reconfigure
+	wpa_cli -i "${interface}" reconfigure
 
-	status=$(wpa_cli -i wlan0 status | grep "wpa_state=" | cut -d= -f2)
+	status=$(wpa_cli -i "${interface}" status | grep "wpa_state=" | cut -d= -f2)
 	if [[ "${status}" != "COMPLETED" ]]; then
-		echo "Unable to connect to wifi. Exiting"
+		echo -e "Unable to connect to wifi.\nSee \"wpa_cli -i ${interface} status\" for more info."
 		exit 1
 	fi
 fi
