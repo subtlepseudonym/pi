@@ -79,7 +79,13 @@ mv "/home/${default_user}/.profile" "${home}/"
 mv "/home/${default_user}/.bashrc" "${home}/"
 git clone "https://github.com/subtlepseudonym/dotfiles" "${home}/dotfiles"
 chown -R "${user}:${user}" "${home}"
-/usr/bin/sudo -H -u ${user} ${home}/dotfiles/setup/install --exclude go --exclude macos --exclude nvm
+/usr/bin/sudo --user ${user} --set-home --shell ${home}/dotfiles/setup/install --unattended \
+	--exclude go \
+	--exclude k8s \
+	--exclude macos \
+	--exclude nvm \
+	--exclude python \
+	--exclude rust
 chsh -s /usr/bin/zsh "${user}"
 
 echo "Creating cleanup script..."
